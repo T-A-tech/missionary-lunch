@@ -11,13 +11,17 @@
 admin_email = ENV.fetch("ADMIN_EMAIL", "admin@almoco.com")
 admin_name  = ENV.fetch("ADMIN_NAME", "Admin")
 admin_pass  = ENV.fetch("ADMIN_PASSWORD", "changeme123")
+admin_stake = ENV.fetch("ADMIN_STAKE", "Estaca Padrão")
+admin_ward  = ENV.fetch("ADMIN_WARD", "Ala Padrão")
 
-unless User.exists?(email: admin_email.downcase)
-  User.create!(
-    name: admin_name,
-    email: admin_email,
-    password: admin_pass,
-    password_confirmation: admin_pass
-  )
-  puts "Admin user created: #{admin_email}"
+user = User.find_or_create_by!(email: admin_email.downcase) do |u|
+  u.name = admin_name
+  u.password = admin_pass
+  u.password_confirmation = admin_pass
+end
+
+unless user.ward
+  stake = Stake.find_or_create_by!(name: admin_stake)
+  Ward.create!(user: user, stake: stake, name: admin_ward)
+  puts "Admin ward created: #{admin_ward} - #{admin_stake}"
 end
