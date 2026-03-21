@@ -34,6 +34,6 @@ class DashboardController < ApplicationController
 
   def set_ward
     @ward = current_user.ward
-    redirect_to new_registration_path, alert: "Configure sua ala/ramo primeiro." unless @ward
+    redirect_to register_path, alert: "Configure sua ala/ramo primeiro." unless @ward
   end
 end
