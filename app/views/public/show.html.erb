@@ -19,8 +19,8 @@
 <div style="position:relative;z-index:1">
   <div class="container" style="max-width:700px">
     <div style="text-align:center;margin-bottom:2rem">
-      <p class="public-title" style="font-family:Georgia,serif;font-size:37px;font-weight:600;color:#D4A843;letter-spacing:0.05em;margin-bottom:4px">Almoço dos Missionários</p>
-      <h1 class="public-ward" style="display:inline-block;font-size:32px"><%= @ward.name %></h1>
+      <p class="public-title" style="font-family:Georgia,serif;font-size:50px;font-weight:600;color:#D4A843;letter-spacing:0.05em;margin-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,0.3)">Almoço dos Missionários</p>
+      <h1 class="public-ward" style="display:inline-block;font-size:32px"><%= @ward.name %><span style="display:block;height:3px;background:#D4A843;border-radius:2px;margin-top:6px"></span></h1>
       <p style="font-family:Georgia,serif;font-size:16px;color:#5C5C5C;margin-top:4px"><%= @ward.stake.name %></p>
       <p class="text-muted" style="margin-top:.5rem;font-size:14px">Clique em um dia disponível para agendar</p>
     </div>
@@ -129,6 +129,9 @@
 </div>
 
 <style>
+  /* Linha dourada cobre o nome inteiro */
+  .public-ward::after { display: none; }
+
   /* ── Responsivo: página pública ── */
   @media (max-width: 480px) {
     .public-title { font-size: 22px !important; letter-spacing: 0.02em !important; }
