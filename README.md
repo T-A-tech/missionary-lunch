@@ -71,42 +71,7 @@ O design segue a identidade visual institucional da Igreja:
 
 ---
 
-## Estrutura do Projeto
 
-```
-app/
-├── controllers/
-│   ├── application_controller.rb   # Auth helpers (current_user, require_login)
-│   ├── sessions_controller.rb      # Login / Logout
-│   ├── registrations_controller.rb # Cadastro de líder + ala
-│   ├── dashboard_controller.rb     # Painel do líder
-│   └── public_controller.rb        # Página pública (agendamento)
-├── models/
-│   ├── stake.rb                    # Estaca
-│   ├── user.rb                     # Líder de ala
-│   ├── ward.rb                     # Ala/Ramo (com token público)
-│   └── appointment.rb              # Agendamento
-├── views/
-│   ├── layouts/application.html.erb
-│   ├── sessions/new.html.erb       # Tela de login
-│   ├── registrations/new.html.erb  # Tela de cadastro
-│   ├── dashboard/
-│   │   ├── index.html.erb          # Painel principal
-│   │   └── appointments.html.erb   # Lista de agendamentos
-│   └── public/
-│       └── show.html.erb           # Página pública com calendário
-config/
-├── routes.rb
-├── database.yml
-└── locales/pt-BR.yml               # Tradução pt-BR
-db/migrate/
-├── 20240101000001_create_stakes.rb
-├── 20240101000002_create_users.rb
-├── 20240101000003_create_wards.rb
-└── 20240101000004_create_appointments.rb
-```
-
----
 
 ## Rodando Localmente
 
