@@ -19,4 +19,3 @@ services:
     buildFilter:
       paths:
         - "**/*"
-    dockerCommand: bash -c "bin/rails db:prepare && bin/rails db:seed && bin/rails server -b 0.0.0.0"

@@ -61,6 +61,7 @@ RUN mkdir -p db log storage tmp && \
 
 USER 1000:1000
 
+ENTRYPOINT ["bin/docker-entrypoint"]
 EXPOSE 3000
 
 CMD ["bin/rails", "server", "-b", "0.0.0.0"]
