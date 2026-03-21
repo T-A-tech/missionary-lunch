@@ -10,7 +10,13 @@ services:
         sync: false
       - key: SECRET_KEY_BASE
         generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_NAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
     buildFilter:
       paths:
         - "**/*"
-    dockerCommand: bash -c "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
+    dockerCommand: bash -c "bin/rails db:prepare && bin/rails db:seed && bin/rails server -b 0.0.0.0"
