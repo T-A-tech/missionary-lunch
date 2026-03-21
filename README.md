@@ -57,6 +57,39 @@ O design segue a identidade visual institucional da Igreja:
 
 ---
 
+## Funcionalidades
+
+- [x] Cadastro de líder com criação automática de estaca e ala
+- [x] Login/logout com sessão segura (bcrypt)
+- [x] Dashboard com calendário mensal e navegação entre meses
+- [x] Link público com token único por ala
+- [x] Calendário interativo com pop-up de agendamento
+- [x] Validação de data (sem duplicatas, sem datas passadas)
+- [x] Slideshow de imagens como marca d'água na página pública
+- [x] Design responsivo (mobile, tablet, desktop)
+- [x] Identidade visual institucional (Navy/Ouro/Creme/Georgia)
+- [x] Locale pt-BR (meses em português)
+- [x] Docker Compose para desenvolvimento local
+- [x] Dockerfile multi-stage para produção
+
+---
+
+## Licença
+
+Este projeto é de uso interno para unidades da Igreja de Jesus Cristo dos Santos dos Últimos Dias.
+
+---
+
+<br>
+
+<h2 align="center">Para DEVs</h2>
+
+<p align="center">
+  <sub>Documentação técnica para desenvolvedores que desejam contribuir ou fazer deploy</sub>
+</p>
+
+---
+
 ## Stack Tecnológica
 
 | Camada | Tecnologia |
@@ -71,7 +104,86 @@ O design segue a identidade visual institucional da Igreja:
 
 ---
 
+## Estrutura do Projeto
 
+```
+app/
+├── controllers/
+│   ├── application_controller.rb   # Auth helpers (current_user, require_login)
+│   ├── sessions_controller.rb      # Login / Logout
+│   ├── registrations_controller.rb # Cadastro de líder + ala
+│   ├── dashboard_controller.rb     # Painel do líder
+│   └── public_controller.rb        # Página pública (agendamento)
+├── models/
+│   ├── stake.rb                    # Estaca
+│   ├── user.rb                     # Líder de ala
+│   ├── ward.rb                     # Ala/Ramo (com token público)
+│   └── appointment.rb              # Agendamento
+├── views/
+│   ├── layouts/application.html.erb
+│   ├── sessions/new.html.erb       # Tela de login
+│   ├── registrations/new.html.erb  # Tela de cadastro
+│   ├── dashboard/
+│   │   ├── index.html.erb          # Painel principal
+│   │   └── appointments.html.erb   # Lista de agendamentos
+│   └── public/
+│       └── show.html.erb           # Página pública com calendário
+config/
+├── routes.rb
+├── database.yml
+└── locales/pt-BR.yml               # Tradução pt-BR
+db/migrate/
+├── 20240101000001_create_stakes.rb
+├── 20240101000002_create_users.rb
+├── 20240101000003_create_wards.rb
+└── 20240101000004_create_appointments.rb
+```
+
+---
+
+## Modelo de Dados
+
+```
+┌──────────┐       ┌──────────┐       ┌──────────────┐
+│  Stake   │1    N │   Ward   │1    N │ Appointment  │
+│──────────│───────│──────────│───────│──────────────│
+│ name     │       │ name     │       │ scheduled_date│
+│          │       │ public_  │       │ family_name  │
+│          │       │   token  │       │ phone        │
+│          │       │ user_id  │       │ reminder_sent│
+│          │       │ stake_id │       │ ward_id      │
+└──────────┘       └──────────┘       └──────────────┘
+                        │1
+                        │
+                   ┌────┴─────┐
+                   │   User   │
+                   │──────────│
+                   │ name     │
+                   │ email    │
+                   │ password │
+                   │  _digest │
+                   └──────────┘
+```
+
+---
+
+## Rotas
+
+| Método | Path | Controller#Action | Descrição |
+|--------|------|-------------------|-----------|
+| GET | `/login` | sessions#new | Tela de login |
+| POST | `/login` | sessions#create | Autenticar |
+| DELETE | `/logout` | sessions#destroy | Sair |
+| GET | `/register` | registrations#new | Tela de cadastro |
+| POST | `/register` | registrations#create | Criar conta |
+| GET | `/dashboard` | dashboard#index | Painel do líder |
+| GET | `/dashboard/appointments` | dashboard#appointments | Todos agendamentos |
+| PATCH | `/dashboard/ward` | dashboard#update_ward | Atualizar nome da ala |
+| DELETE | `/dashboard/appointments/:id` | dashboard#destroy_appointment | Remover agendamento |
+| GET | `/w/:token` | public#show | Página pública da ala |
+| POST | `/w/:token/appointments` | public#create | Criar agendamento |
+
+---
 
 ## Rodando Localmente
 
@@ -135,73 +247,6 @@ flyctl deploy
 ```bash
 flyctl deploy
 ```
-
----
-
-## Modelo de Dados
-
-```
-┌──────────┐       ┌──────────┐       ┌──────────────┐
-│  Stake   │1    N │   Ward   │1    N │ Appointment  │
-│──────────│───────│──────────│───────│──────────────│
-│ name     │       │ name     │       │ scheduled_date│
-│          │       │ public_  │       │ family_name  │
-│          │       │   token  │       │ phone        │
-│          │       │ user_id  │       │ reminder_sent│
-│          │       │ stake_id │       │ ward_id      │
-└──────────┘       └──────────┘       └──────────────┘
-                        │1
-                        │
-                   ┌────┴─────┐
-                   │   User   │
-                   │──────────│
-                   │ name     │
-                   │ email    │
-                   │ password │
-                   │  _digest │
-                   └──────────┘
-```
-
----
-
-## Rotas
-
-| Método | Path | Controller#Action | Descrição |
-|--------|------|-------------------|-----------|
-| GET | `/login` | sessions#new | Tela de login |
-| POST | `/login` | sessions#create | Autenticar |
-| DELETE | `/logout` | sessions#destroy | Sair |
-| GET | `/register` | registrations#new | Tela de cadastro |
-| POST | `/register` | registrations#create | Criar conta |
-| GET | `/dashboard` | dashboard#index | Painel do líder |
-| GET | `/dashboard/appointments` | dashboard#appointments | Todos agendamentos |
-| PATCH | `/dashboard/ward` | dashboard#update_ward | Atualizar nome da ala |
-| DELETE | `/dashboard/appointments/:id` | dashboard#destroy_appointment | Remover agendamento |
-| GET | `/w/:token` | public#show | Página pública da ala |
-| POST | `/w/:token/appointments` | public#create | Criar agendamento |
-
----
-
-## Funcionalidades
-
-- [x] Cadastro de líder com criação automática de estaca e ala
-- [x] Login/logout com sessão segura (bcrypt)
-- [x] Dashboard com calendário mensal e navegação entre meses
-- [x] Link público com token único por ala
-- [x] Calendário interativo com pop-up de agendamento
-- [x] Validação de data (sem duplicatas, sem datas passadas)
-- [x] Slideshow de imagens como marca d'água na página pública
-- [x] Design responsivo (mobile, tablet, desktop)
-- [x] Identidade visual institucional (Navy/Ouro/Creme/Georgia)
-- [x] Locale pt-BR (meses em português)
-- [x] Docker Compose para desenvolvimento local
-- [x] Dockerfile multi-stage para produção
-
----
-
-## Licença
-
-Este projeto é de uso interno para unidades da Igreja de Jesus Cristo dos Santos dos Últimos Dias.
 
 ---
 
