@@ -12,11 +12,10 @@
 
 ActiveRecord::Schema[7.2].define(version: 2024_01_01_000004) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "appointments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "ward_id", null: false
+  create_table "appointments", force: :cascade do |t|
+    t.bigint "ward_id", null: false
     t.date "scheduled_date", null: false
     t.string "family_name", null: false
     t.string "phone"
@@ -27,13 +26,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_01_01_000004) do
     t.index ["ward_id"], name: "index_appointments_on_ward_id"
   end
 
-  create_table "stakes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "stakes", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -42,9 +41,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_01_01_000004) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  create_table "wards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "stake_id", null: false
-    t.uuid "user_id", null: false
+  create_table "wards", force: :cascade do |t|
+    t.bigint "stake_id", null: false
+    t.bigint "user_id", null: false
     t.string "name", null: false
     t.string "public_token", null: false
     t.datetime "created_at", null: false
