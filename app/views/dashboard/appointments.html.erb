@@ -1,0 +1,48 @@
+<div class="container">
+  <h1 style="margin-bottom:1.5rem">Todos os agendamentos</h1>
+
+  <div class="card">
+    <div class="card-title">Próximos (<%= @upcoming.count %>)</div>
+    <% if @upcoming.empty? %>
+      <p class="text-muted">Nenhum agendamento futuro.</p>
+    <% else %>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Data</th><th>Família</th><th>Telefone</th><th></th></tr></thead>
+        <tbody>
+          <% @upcoming.each do |apt| %>
+            <tr>
+              <td><%= apt.scheduled_date.strftime("%d/%m/%Y (%A)") %></td>
+              <td><%= apt.family_name %></td>
+              <td><%= apt.phone.presence || "—" %></td>
+              <td>
+                <%= button_to "Remover", dashboard_appointment_path(apt), method: :delete,
+                    class: "btn btn-danger btn-sm",
+                    data: { confirm: "Remover agendamento?" } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table></div>
+    <% end %>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Histórico (<%= @past.count %>)</div>
+    <% if @past.empty? %>
+      <p class="text-muted">Nenhum agendamento passado.</p>
+    <% else %>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Data</th><th>Família</th><th>Telefone</th></tr></thead>
+        <tbody>
+          <% @past.each do |apt| %>
+            <tr>
+              <td class="text-muted"><%= apt.scheduled_date.strftime("%d/%m/%Y") %></td>
+              <td><%= apt.family_name %></td>
+              <td><%= apt.phone.presence || "—" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table></div>
+    <% end %>
+  </div>
+</div>

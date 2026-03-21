@@ -1,0 +1,39 @@
+<div class="container-sm">
+  <div class="card">
+    <h1 style="margin-bottom:.25rem">Criar conta</h1>
+    <p class="text-muted" style="margin-bottom:1.5rem">Líder de ala — cadastre sua unidade</p>
+
+    <%= form_with url: register_path, scope: nil do |f| %>
+      <div class="form-group">
+        <%= f.label :name, "Seu nome" %>
+        <%= f.text_field :name, autofocus: true %>
+      </div>
+      <div class="form-group">
+        <%= f.label :email, "E-mail" %>
+        <%= f.email_field :email, autocomplete: "email" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password, "Senha" %>
+        <%= f.password_field :password %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirmar senha" %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+      <hr style="margin:1.25rem 0;border:none;border-top:1px solid #e8e6e1">
+      <div class="form-group">
+        <%= label_tag :stake_name, "Nome da estaca" %>
+        <%= text_field_tag :stake_name, nil, placeholder: "Ex: Estaca Fortaleza Leste" %>
+      </div>
+      <div class="form-group">
+        <%= label_tag :ward_name, "Nome da sua ala" %>
+        <%= text_field_tag :ward_name, nil, placeholder: "Ex: Ala Messejana" %>
+      </div>
+      <%= f.submit "Criar conta", class: "btn btn-primary", style: "width:100%" %>
+    <% end %>
+
+    <p class="text-muted" style="margin-top:1rem;text-align:center">
+      Já tem conta? <%= link_to "Entrar", login_path %>
+    </p>
+  </div>
+</div>

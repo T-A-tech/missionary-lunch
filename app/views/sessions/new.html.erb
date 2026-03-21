@@ -1,0 +1,22 @@
+<div class="container-sm">
+  <div class="card">
+    <h1 style="margin-bottom:.25rem">Entrar</h1>
+    <p class="text-muted" style="margin-bottom:1.5rem">Acesse o painel da sua ala</p>
+
+    <%= form_with url: login_path do |f| %>
+      <div class="form-group">
+        <%= f.label :email, "E-mail" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password, "Senha" %>
+        <%= f.password_field :password, autocomplete: "current-password" %>
+      </div>
+      <%= f.submit "Entrar", class: "btn btn-primary", style: "width:100%" %>
+    <% end %>
+
+    <p class="text-muted" style="margin-top:1rem;text-align:center">
+      Não tem conta? <%= link_to "Cadastre-se", register_path %>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,203 @@
+<%# Slideshow de fundo (marca d'água) %>
+<div id="slideshow" style="
+  position:fixed; inset:0; z-index:0; overflow:hidden;
+">
+  <div id="slide-1" class="slide" style="
+    position:absolute; inset:0;
+    background-size:cover; background-position:center;
+    opacity:0; transition:opacity 2s ease-in-out;
+  "></div>
+  <div id="slide-2" class="slide" style="
+    position:absolute; inset:0;
+    background-size:cover; background-position:center;
+    opacity:0; transition:opacity 2s ease-in-out;
+  "></div>
+  <%# Camada de sobreposição creme para efeito marca d'água %>
+  <div style="position:absolute;inset:0;background:rgba(250,248,244,0.7)"></div>
+</div>
+
+<div style="position:relative;z-index:1">
+  <div class="container" style="max-width:700px">
+    <div style="text-align:center;margin-bottom:2rem">
+      <p class="public-title" style="font-family:Georgia,serif;font-size:37px;font-weight:600;color:#D4A843;letter-spacing:0.05em;margin-bottom:4px">Almoço dos Missionários</p>
+      <h1 class="public-ward" style="display:inline-block;font-size:32px"><%= @ward.name %></h1>
+      <p style="font-family:Georgia,serif;font-size:16px;color:#5C5C5C;margin-top:4px"><%= @ward.stake.name %></p>
+      <p class="text-muted" style="margin-top:.5rem;font-size:14px">Clique em um dia disponível para agendar</p>
+    </div>
+
+    <%# Calendário mensal %>
+    <div class="card">
+      <%
+        today = Date.today
+        month_start = @current_month
+        month_end   = month_start.end_of_month
+        prev_month  = (month_start - 1.month).strftime("%Y-%m-%d")
+        next_month  = (month_start + 1.month).strftime("%Y-%m-%d")
+        month_name  = I18n.l(month_start, format: "%B %Y").capitalize rescue month_start.strftime("%B %Y").capitalize
+      %>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <%= link_to "←", public_ward_path(@ward.public_token, month: prev_month), class: "btn btn-outline btn-sm" %>
+        <span style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#003B71"><%= month_name %></span>
+        <%= link_to "→", public_ward_path(@ward.public_token, month: next_month), class: "btn btn-outline btn-sm" %>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px">
+        <% %w[Dom Seg Ter Qua Qui Sex Sáb].each do |d| %>
+          <span style="text-align:center;font-size:12px;font-weight:700;color:#003B71;padding:6px 0;text-transform:uppercase"><%= d %></span>
+        <% end %>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+        <% month_start.wday.times { %><div></div><% } %>
+        <% (month_start..month_end).each do |d| %>
+          <% date_str = d.strftime("%Y-%m-%d") %>
+          <% family = @taken_info[date_str] %>
+          <% is_past = d < today %>
+          <% is_today = d == today %>
+          <% if family %>
+            <div style="
+              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              border-radius:10px; font-size:15px; font-weight:500;
+              background:#FBF4E2; color:#8B6914; border:1px solid #E8D5A0;
+            ">
+              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:9px;margin-top:2px;text-align:center;line-height:1.2;padding:0 2px"><%= family %></span>
+            </div>
+          <% elsif is_past %>
+            <div style="
+              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              border-radius:10px; font-size:15px; color:#C0BBAF;
+            ">
+              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+            </div>
+          <% elsif is_today %>
+            <div onclick="openModal('<%= date_str %>')" style="
+              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              border-radius:10px; font-size:15px; font-weight:500; cursor:pointer;
+              background:#003B71; color:#FFFFFF; border:2px solid transparent; transition:border-color .15s;
+            " onmouseover="this.style.borderColor='#D4A843'" onmouseout="this.style.borderColor='transparent'">
+              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:10px;margin-top:2px">hoje</span>
+            </div>
+          <% else %>
+            <div onclick="openModal('<%= date_str %>')" style="
+              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              border-radius:10px; font-size:15px; font-weight:500; cursor:pointer;
+              background:#EAF0F7; color:#003B71; border:2px solid transparent; transition:border-color .15s;
+            " onmouseover="this.style.borderColor='#D4A843'" onmouseout="this.style.borderColor='transparent'">
+              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:10px;margin-top:2px">livre</span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# Modal / Pop-up de agendamento %>
+<div id="modal-overlay" onclick="closeModal(event)" style="
+  display:none; position:fixed; inset:0; background:rgba(0,59,113,0.4);
+  z-index:1000; align-items:center; justify-content:center;
+">
+  <div style="
+    background:#fff; border-radius:14px; padding:1.75rem; width:90%; max-width:400px;
+    box-shadow:0 12px 40px rgba(0,59,113,0.2); position:relative;
+    border-top:4px solid #D4A843;
+  ">
+    <button onclick="closeModal()" style="
+      position:absolute; top:12px; right:14px; background:none; border:none;
+      font-size:20px; cursor:pointer; color:#999; line-height:1;
+    ">&times;</button>
+
+    <div class="card-title" style="margin-bottom:.25rem">Agendar almoço</div>
+    <p class="text-muted" style="margin-bottom:1.25rem;font-size:13px">
+      Data: <strong id="modal-date-label" style="color:#003B71"></strong>
+    </p>
+
+    <%= form_with model: @appointment, url: public_appointments_path(@ward.public_token) do |f| %>
+      <%= f.hidden_field :scheduled_date, id: "modal-date-field" %>
+      <div class="form-group">
+        <%= f.label :family_name, "Nome da família" %>
+        <%= f.text_field :family_name, placeholder: "Ex: Família Costa", id: "modal-family-name" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :phone, "WhatsApp (opcional)" %>
+        <%= f.telephone_field :phone, placeholder: "(85) 9 9999-9999" %>
+      </div>
+      <%= f.submit "Confirmar agendamento", class: "btn btn-primary", style: "width:100%" %>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  /* ── Responsivo: página pública ── */
+  @media (max-width: 480px) {
+    .public-title { font-size: 22px !important; letter-spacing: 0.02em !important; }
+    .public-ward { font-size: 22px !important; }
+    #modal-overlay > div { padding: 1.25rem !important; width: 95% !important; }
+  }
+  @media (min-width: 481px) and (max-width: 768px) {
+    .public-title { font-size: 28px !important; }
+    .public-ward { font-size: 26px !important; }
+  }
+</style>
+
+<script>
+  // ── Slideshow ──
+  var slides = [
+    <% Dir.glob(Rails.root.join("app/assets/images/slides/*.{jpg,jpeg,png,webp}")).sort.each do |img| %>
+      "<%= asset_path("slides/#{File.basename(img)}") %>",
+    <% end %>
+  ];
+
+  var current = 0;
+  var el1 = document.getElementById("slide-1");
+  var el2 = document.getElementById("slide-2");
+  var front = el1;
+  var back = el2;
+
+  // Carrega primeira imagem
+  if (slides.length > 0) {
+    front.style.backgroundImage = "url(" + slides[0] + ")";
+    front.style.opacity = 1;
+  }
+
+  // Troca de slide a cada 6 segundos
+  if (slides.length > 1) {
+    setInterval(function() {
+      current = (current + 1) % slides.length;
+      back.style.backgroundImage = "url(" + slides[current] + ")";
+      back.style.opacity = 1;
+      front.style.opacity = 0;
+      // Swap
+      var temp = front;
+      front = back;
+      back = temp;
+    }, 6000);
+  }
+
+  // ── Modal ──
+  function openModal(date) {
+    var parts = date.split("-");
+    document.getElementById("modal-date-field").value = date;
+    document.getElementById("modal-date-label").textContent = parts[2] + "/" + parts[1] + "/" + parts[0];
+
+    var overlay = document.getElementById("modal-overlay");
+    overlay.style.display = "flex";
+
+    setTimeout(function() {
+      document.getElementById("modal-family-name").focus();
+    }, 100);
+  }
+
+  function closeModal(event) {
+    if (!event || event.target === document.getElementById("modal-overlay")) {
+      document.getElementById("modal-overlay").style.display = "none";
+    }
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      document.getElementById("modal-overlay").style.display = "none";
+    }
+  });
+</script>

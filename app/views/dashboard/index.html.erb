@@ -1,0 +1,126 @@
+<div class="container">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;gap:1rem;flex-wrap:wrap">
+    <div>
+      <h1><%= @ward.name %></h1>
+      <p class="text-muted"><%= @ward.stake.name %></p>
+    </div>
+    <%= link_to "Ver todos os agendamentos →", dashboard_appointments_path, class: "btn btn-outline" %>
+  </div>
+
+  <%# Link público %>
+  <div class="card">
+    <div class="card-title">Link para membros</div>
+    <p class="text-muted" style="margin-bottom:.75rem;font-size:13px">
+      Compartilhe esse link com os membros da sua ala. Apenas quem tiver o link pode agendar.
+    </p>
+    <div class="link-box" id="public-url"><%= @public_url %></div>
+    <div style="display:flex;gap:8px;margin-top:.75rem">
+      <button class="btn btn-outline btn-sm" onclick="copyLink()">Copiar link</button>
+    </div>
+  </div>
+
+  <%# Calendário mensal %>
+  <div class="card">
+    <%
+      today = Date.today
+      month_start = @current_month
+      month_end   = month_start.end_of_month
+      prev_month  = (month_start - 1.month).strftime("%Y-%m-%d")
+      next_month  = (month_start + 1.month).strftime("%Y-%m-%d")
+      month_name  = I18n.l(month_start, format: "%B %Y").capitalize rescue month_start.strftime("%B %Y").capitalize
+    %>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <%= link_to "←", dashboard_path(month: prev_month), class: "btn btn-outline btn-sm" %>
+      <span style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#003B71"><%= month_name %></span>
+      <%= link_to "→", dashboard_path(month: next_month), class: "btn btn-outline btn-sm" %>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px">
+      <% %w[Dom Seg Ter Qua Qui Sex Sáb].each do |d| %>
+        <span style="text-align:center;font-size:12px;font-weight:700;color:#003B71;padding:6px 0;text-transform:uppercase"><%= d %></span>
+      <% end %>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+      <% month_start.wday.times { %><div></div><% } %>
+      <% (month_start..month_end).each do |d| %>
+        <% family = @taken_info[d] %>
+        <% is_past = d < today %>
+        <% is_today = d == today %>
+        <% if family %>
+          <div style="
+            min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border-radius:10px; font-size:15px; font-weight:500;
+            background:#FBF4E2; color:#8B6914; border:1px solid #E8D5A0;
+          ">
+            <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+            <span style="font-size:9px;margin-top:2px;text-align:center;line-height:1.2;padding:0 2px"><%= family %></span>
+          </div>
+        <% elsif is_past %>
+          <div style="
+            min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border-radius:10px; font-size:15px; color:#C0BBAF;
+          ">
+            <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+          </div>
+        <% elsif is_today %>
+          <div style="
+            min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border-radius:10px; font-size:15px; font-weight:500;
+            background:#003B71; color:#FFFFFF; border:1px solid transparent;
+          ">
+            <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+            <span style="font-size:10px;margin-top:2px">hoje</span>
+          </div>
+        <% else %>
+          <div style="
+            min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border-radius:10px; font-size:15px; font-weight:500;
+            background:#EAF0F7; color:#003B71; border:1px solid transparent;
+          ">
+            <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+            <span style="font-size:10px;margin-top:2px">livre</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <%# Próximos agendamentos %>
+  <div class="card">
+    <div class="card-title">Próximos almoços (<%= @upcoming.count %>)</div>
+    <% if @upcoming.empty? %>
+      <p class="text-muted">Nenhum almoço agendado ainda.</p>
+    <% else %>
+      <div class="table-wrap"><table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Família</th>
+            <th>Telefone</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @upcoming.each do |apt| %>
+            <tr>
+              <td><strong><%= apt.scheduled_date.strftime("%d/%m/%Y") %></strong> <span class="text-muted">(<%= apt.scheduled_date.strftime("%A") %>)</span></td>
+              <td><%= apt.family_name %></td>
+              <td><%= apt.phone.presence || "—" %></td>
+              <td>
+                <%= button_to "Remover", dashboard_appointment_path(apt), method: :delete,
+                    class: "btn btn-danger btn-sm",
+                    data: { confirm: "Remover agendamento de #{apt.family_name}?" } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table></div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+function copyLink() {
+  navigator.clipboard.writeText(document.getElementById("public-url").innerText);
+  alert("Link copiado!");
+}
+</script>

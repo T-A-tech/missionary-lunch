@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Almoços Missionários</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <style>
+    :root {
+      --navy: #003B71;
+      --navy-light: #004F99;
+      --navy-dark: #002D56;
+      --gold: #D4A843;
+      --gold-light: #F0D48A;
+      --gold-bg: #FBF4E2;
+      --cream: #FAF8F4;
+      --cream-dark: #F0EDE5;
+      --white: #FFFFFF;
+      --text: #1C1C1C;
+      --text-muted: #5C5C5C;
+      --border: #E0DDD6;
+      --danger: #B33A3A;
+      --danger-bg: #FCEEEE;
+      --success-bg: #EAF5EF;
+      --success: #1B6B42;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--navy); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Navbar ── */
+    .nav {
+      background: var(--navy);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      box-shadow: 0 2px 8px rgba(0,59,113,0.15);
+    }
+    .nav-brand {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 21px;
+      color: var(--white);
+      letter-spacing: 0.01em;
+    }
+    .nav-brand::after {
+      content: "";
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: var(--gold);
+      margin-top: 2px;
+      border-radius: 1px;
+    }
+    .nav-links { display: flex; gap: 1.25rem; align-items: center; font-size: 14px; }
+    .nav-links a { color: rgba(255,255,255,0.8); }
+    .nav-links a:hover { color: var(--white); text-decoration: none; }
+    .nav-links .btn-outline { color: var(--gold-light); border-color: var(--gold); }
+    .nav-links .btn-outline:hover { background: rgba(212,168,67,0.15); color: var(--white); }
+
+    /* ── Layout ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .container-sm { max-width: 440px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .card-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+    h1::after {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin-top: 6px;
+      border-radius: 2px;
+    }
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    .text-muted { color: var(--text-muted); font-size: 14px; }
+
+    /* ── Forms ── */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--navy);
+    }
+    .form-group input[type=text],
+    .form-group input[type=email],
+    .form-group input[type=password],
+    .form-group input[type=date],
+    .form-group input[type=tel] {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; background: var(--white);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(0,59,113,0.1);
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer; border: none;
+      transition: all .15s; text-decoration: none;
+    }
+    .btn:hover { opacity: .9; text-decoration: none; }
+    .btn-primary { background: var(--navy); color: var(--white); }
+    .btn-primary:hover { background: var(--navy-light); }
+    .btn-secondary { background: var(--gold); color: var(--navy-dark); }
+    .btn-secondary:hover { background: var(--gold-light); }
+    .btn-danger { background: var(--danger); color: var(--white); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--navy); }
+    .btn-outline:hover { background: var(--cream); }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+
+    /* ── Alerts ── */
+    .alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 1rem; }
+    .alert-notice { background: var(--success-bg); color: var(--success); border: 1px solid #B2D8C4; }
+    .alert-alert  { background: var(--danger-bg); color: var(--danger); border: 1px solid #F0C4C4; }
+
+    /* ── Badges ── */
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-green { background: var(--success-bg); color: var(--success); }
+    .badge-coral { background: var(--gold-bg); color: #8B6914; }
+    .badge-gray  { background: var(--cream-dark); color: var(--text-muted); }
+
+    /* ── Link box ── */
+    .link-box {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--navy);
+      word-break: break-all;
+    }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th {
+      text-align: left; font-size: 11px; font-weight: 700;
+      color: var(--navy); text-transform: uppercase; letter-spacing: .06em;
+      padding: 10px 12px; border-bottom: 2px solid var(--gold);
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--cream-dark); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+    /* ── Responsive: Mobile (até 480px) ── */
+    @media (max-width: 480px) {
+      .nav { padding: 0 1rem; height: 56px; }
+      .nav-brand { font-size: 16px; }
+      .nav-brand::after { width: 24px; }
+      .nav-links { gap: 0.5rem; font-size: 12px; }
+      .nav-links .btn-sm { padding: 4px 8px; font-size: 11px; }
+
+      .container { padding: 1rem 0.75rem; }
+      .container-sm { padding: 1.5rem 0.75rem; }
+
+      .card { padding: 1rem; border-radius: 10px; }
+      .card-title { font-size: 15px; }
+
+      h1 { font-size: 20px; }
+      h2 { font-size: 16px; }
+
+      .btn { padding: 8px 14px; font-size: 13px; }
+
+      table { font-size: 12px; }
+      th, td { padding: 6px 8px; }
+
+      /* Tabela responsiva: scroll horizontal */
+      .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    }
+
+    /* ── Responsive: Tablet (481px–768px) ── */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .nav { padding: 0 1.25rem; height: 60px; }
+      .nav-brand { font-size: 18px; }
+      .nav-links { gap: 0.75rem; font-size: 13px; }
+
+      .container { padding: 1.5rem 1rem; }
+      .container-sm { padding: 2rem 1rem; }
+
+      .card { padding: 1.25rem; }
+
+      h1 { font-size: 22px; }
+
+      table { font-size: 13px; }
+      th, td { padding: 8px 10px; }
+    }
+
+    /* ── Responsive: Desktop grande (1200px+) ── */
+    @media (min-width: 1200px) {
+      .container { max-width: 960px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <span class="nav-brand">Almoços Missionários</span>
+    <% unless controller_name == "public" %>
+      <div class="nav-links">
+        <% if logged_in? %>
+          <%= link_to "Dashboard", dashboard_path %>
+          <%= link_to "Agendamentos", dashboard_appointments_path %>
+          <%= button_to "Sair", logout_path, method: :delete, class: "btn btn-outline btn-sm" %>
+        <% else %>
+          <%= link_to "Entrar", login_path %>
+          <%= link_to "Criar conta", register_path, class: "btn btn-secondary btn-sm" %>
+        <% end %>
+      </div>
+    <% end %>
+  </nav>
+
+  <% if notice.present? %>
+    <div class="container"><div class="alert alert-notice"><%= notice %></div></div>
+  <% end %>
+  <% if alert.present? %>
+    <div class="container"><div class="alert alert-alert"><%= alert %></div></div>
+  <% end %>
+
+  <%= yield %>
+</body>
+</html>
