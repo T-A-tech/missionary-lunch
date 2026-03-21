@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
     @current_month = params[:month].present? ? Date.parse(params[:month]) : Date.today.beginning_of_month
     @taken_info = @ward.appointments
                        .where(scheduled_date: @current_month..@current_month.end_of_month)
-                       .each_with_object({}) { |apt, h| h[apt.scheduled_date] = apt.family_name }
+                       .each_with_object({}) { |apt, h| h[apt.scheduled_date] = { name: apt.family_name, phone: apt.phone } }
   end
 
   def appointments

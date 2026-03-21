@@ -42,17 +42,18 @@
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
       <% month_start.wday.times { %><div></div><% } %>
       <% (month_start..month_end).each do |d| %>
-        <% family = @taken_info[d] %>
+        <% info = @taken_info[d] %>
         <% is_past = d < today %>
         <% is_today = d == today %>
-        <% if family %>
+        <% if info %>
           <div style="
             min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
             border-radius:10px; font-size:15px; font-weight:500;
             background:#FBF4E2; color:#8B6914; border:1px solid #E8D5A0;
           ">
             <span style="font-size:17px;font-weight:700"><%= d.day %></span>
-            <span style="font-size:9px;margin-top:2px;text-align:center;line-height:1.2;padding:0 2px"><%= family %></span>
+            <span style="font-size:9px;margin-top:2px;text-align:center;line-height:1.2;padding:0 2px"><%= info[:name] %></span>
+            <span style="font-size:8px;color:#A08030;text-align:center;line-height:1.1"><%= info[:phone] %></span>
           </div>
         <% elsif is_past %>
           <div style="

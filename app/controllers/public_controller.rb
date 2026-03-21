@@ -7,7 +7,7 @@ class PublicController < ApplicationController
     month_appointments = @ward.appointments.where(scheduled_date: @current_month..@current_month.end_of_month)
     @taken_dates = month_appointments.pluck(:scheduled_date).map { |d| d.strftime("%Y-%m-%d") }
     @taken_info = month_appointments.each_with_object({}) do |apt, h|
-      h[apt.scheduled_date.strftime("%Y-%m-%d")] = apt.family_name
+      h[apt.scheduled_date.strftime("%Y-%m-%d")] = { name: apt.family_name, phone: apt.phone }
     end
   end
 
@@ -21,7 +21,7 @@ class PublicController < ApplicationController
       month_appointments = @ward.appointments.where(scheduled_date: @current_month..@current_month.end_of_month)
       @taken_dates = month_appointments.pluck(:scheduled_date).map { |d| d.strftime("%Y-%m-%d") }
       @taken_info = month_appointments.each_with_object({}) do |apt, h|
-        h[apt.scheduled_date.strftime("%Y-%m-%d")] = apt.family_name
+        h[apt.scheduled_date.strftime("%Y-%m-%d")] = { name: apt.family_name, phone: apt.phone }
       end
       flash.now[:alert] = @appointment.errors.full_messages.to_sentence
       render :show, status: :unprocessable_entity

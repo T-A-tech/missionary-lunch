@@ -17,7 +17,7 @@
 </div>
 
 <div style="position:relative;z-index:1">
-  <div class="container" style="max-width:700px;padding-top:0.5rem">
+  <div class="container" style="max-width:960px;padding-top:0.5rem">
     <div style="text-align:center;margin-bottom:1rem">
       <p class="public-title" style="font-family:Georgia,serif;font-size:50px;font-weight:600;color:#D4A843;letter-spacing:0.05em;margin-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,0.3)">Almoço dos Missionários</p>
       <h1 class="public-ward" style="display:inline-block;font-size:32px"><%= @ward.name %><span style="display:block;height:3px;background:#D4A843;border-radius:2px;margin-top:6px"></span></h1>
@@ -49,42 +49,43 @@
         <% month_start.wday.times { %><div></div><% } %>
         <% (month_start..month_end).each do |d| %>
           <% date_str = d.strftime("%Y-%m-%d") %>
-          <% family = @taken_info[date_str] %>
+          <% info = @taken_info[date_str] %>
           <% is_past = d < today %>
           <% is_today = d == today %>
-          <% if family %>
+          <% if info %>
             <div style="
-              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              min-height:95px; display:flex; flex-direction:column; align-items:center; justify-content:center;
               border-radius:10px; font-size:15px; font-weight:500;
               background:#FBF4E2; color:#8B6914; border:1px solid #E8D5A0;
             ">
-              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
-              <span style="font-size:9px;margin-top:2px;text-align:center;line-height:1.2;padding:0 2px"><%= family %></span>
+              <span style="font-size:20px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:11px;margin-top:3px;text-align:center;line-height:1.2;padding:0 2px"><%= info[:name] %></span>
+              <span style="font-size:10px;color:#A08030;text-align:center;line-height:1.1"><%= info[:phone] %></span>
             </div>
           <% elsif is_past %>
             <div style="
-              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              min-height:95px; display:flex; flex-direction:column; align-items:center; justify-content:center;
               border-radius:10px; font-size:15px; color:#C0BBAF;
             ">
-              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:20px;font-weight:700"><%= d.day %></span>
             </div>
           <% elsif is_today %>
             <div onclick="openModal('<%= date_str %>')" style="
-              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              min-height:95px; display:flex; flex-direction:column; align-items:center; justify-content:center;
               border-radius:10px; font-size:15px; font-weight:500; cursor:pointer;
               background:#003B71; color:#FFFFFF; border:2px solid transparent; transition:border-color .15s;
             " onmouseover="this.style.borderColor='#D4A843'" onmouseout="this.style.borderColor='transparent'">
-              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
-              <span style="font-size:10px;margin-top:2px">hoje</span>
+              <span style="font-size:20px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:12px;margin-top:3px">hoje</span>
             </div>
           <% else %>
             <div onclick="openModal('<%= date_str %>')" style="
-              min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+              min-height:95px; display:flex; flex-direction:column; align-items:center; justify-content:center;
               border-radius:10px; font-size:15px; font-weight:500; cursor:pointer;
               background:#EAF0F7; color:#003B71; border:2px solid transparent; transition:border-color .15s;
             " onmouseover="this.style.borderColor='#D4A843'" onmouseout="this.style.borderColor='transparent'">
-              <span style="font-size:17px;font-weight:700"><%= d.day %></span>
-              <span style="font-size:10px;margin-top:2px">livre</span>
+              <span style="font-size:20px;font-weight:700"><%= d.day %></span>
+              <span style="font-size:12px;margin-top:3px">livre</span>
             </div>
           <% end %>
         <% end %>
