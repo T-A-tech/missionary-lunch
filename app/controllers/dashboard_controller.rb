@@ -18,7 +18,7 @@ class DashboardController < ApplicationController
 
   def update_ward
     if @ward.update(name: params[:ward][:name])
-      redirect_to dashboard_path, notice: "Nome da ala atualizado."
+      redirect_to dashboard_path, notice: "Nome da ala/ramo atualizado."
     else
       redirect_to dashboard_path, alert: "Erro ao atualizar."
     end
@@ -34,6 +34,6 @@ class DashboardController < ApplicationController
 
   def set_ward
     @ward = current_user.ward
-    redirect_to new_registration_path, alert: "Configure sua ala primeiro." unless @ward
+    redirect_to new_registration_path, alert: "Configure sua ala/ramo primeiro." unless @ward
   end
 end
