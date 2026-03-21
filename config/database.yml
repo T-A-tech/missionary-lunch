@@ -54,6 +54,4 @@ test:
 #
 production:
   <<: *default
-  database: almocos_missionarios_production
-  username: almocos_missionarios
-  password: <%= ENV["ALMOCOS_MISSIONARIOS_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>

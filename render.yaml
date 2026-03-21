@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: missionary-lunch
+    runtime: docker
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: SECRET_KEY_BASE
+        generateValue: true
+    buildFilter:
+      paths:
+        - "**/*"
+    dockerCommand: bash -c "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
