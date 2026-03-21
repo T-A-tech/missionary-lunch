@@ -1,4 +1,9 @@
-<div class="container">
+<%# Imagem de fundo fixa %>
+<div style="position:fixed;inset:0;z-index:0;background:url('<%= asset_path('dashboard-bg.png') %>') center/cover no-repeat">
+  <div style="position:absolute;inset:0;background:rgba(250,248,244,0.75)"></div>
+</div>
+
+<div class="container" style="position:relative;z-index:1">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;gap:1rem;flex-wrap:wrap">
     <div>
       <h1><%= @ward.name %></h1>
