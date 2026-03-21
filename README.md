@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Deploy-Fly.io-8B5CF6?style=for-the-badge&logo=flydotio&logoColor=white" />
 </p>
 
-<h1 align="center">Missionary Lunch</h1>
+<h1 align="center">Almoço dos Missionários</h1>
 
 <p align="center">
   <strong>Sistema de agendamento de almoços com missionários para alas e ramos</strong>
