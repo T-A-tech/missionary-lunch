@@ -5,20 +5,20 @@
   <div id="slide-1" class="slide" style="
     position:absolute; inset:0;
     background-size:cover; background-position:center;
-    opacity:0; transition:opacity 2s ease-in-out;
+    opacity:0; transition:opacity 4s ease-in-out;
   "></div>
   <div id="slide-2" class="slide" style="
     position:absolute; inset:0;
     background-size:cover; background-position:center;
-    opacity:0; transition:opacity 2s ease-in-out;
+    opacity:0; transition:opacity 4s ease-in-out;
   "></div>
   <%# Camada de sobreposição creme para efeito marca d'água %>
   <div style="position:absolute;inset:0;background:rgba(250,248,244,0.7)"></div>
 </div>
 
 <div style="position:relative;z-index:1">
-  <div class="container" style="max-width:700px">
-    <div style="text-align:center;margin-bottom:2rem">
+  <div class="container" style="max-width:700px;padding-top:0.5rem">
+    <div style="text-align:center;margin-bottom:1rem">
       <p class="public-title" style="font-family:Georgia,serif;font-size:50px;font-weight:600;color:#D4A843;letter-spacing:0.05em;margin-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,0.3)">Almoço dos Missionários</p>
       <h1 class="public-ward" style="display:inline-block;font-size:32px"><%= @ward.name %><span style="display:block;height:3px;background:#D4A843;border-radius:2px;margin-top:6px"></span></h1>
       <p style="font-family:Georgia,serif;font-size:16px;color:#5C5C5C;margin-top:4px"><%= @ward.stake.name %></p>
@@ -117,13 +117,14 @@
       <%= f.hidden_field :scheduled_date, id: "modal-date-field" %>
       <div class="form-group">
         <%= f.label :family_name, "Nome da família" %>
-        <%= f.text_field :family_name, placeholder: "Ex: Família Costa", id: "modal-family-name" %>
+        <%= f.text_field :family_name, placeholder: "Ex: Família Costa", id: "modal-family-name", required: true %>
       </div>
       <div class="form-group">
-        <%= f.label :phone, "WhatsApp (opcional)" %>
-        <%= f.telephone_field :phone, placeholder: "(85) 9 9999-9999" %>
+        <%= f.label :phone, "WhatsApp" %>
+        <%= f.telephone_field :phone, placeholder: "(85) 9 9999-9999", required: true %>
       </div>
-      <%= f.submit "Confirmar agendamento", class: "btn btn-primary", style: "width:100%" %>
+      <p id="modal-error" style="display:none;color:#B33A3A;font-size:13px;margin-bottom:1rem"></p>
+      <%= f.submit "Confirmar agendamento", class: "btn btn-primary", style: "width:100%", onclick: "return validateForm()" %>
     <% end %>
   </div>
 </div>
@@ -175,7 +176,7 @@
       var temp = front;
       front = back;
       back = temp;
-    }, 6000);
+    }, 8000);
   }
 
   // ── Modal ──
@@ -196,6 +197,32 @@
     if (!event || event.target === document.getElementById("modal-overlay")) {
       document.getElementById("modal-overlay").style.display = "none";
     }
+  }
+
+  function validateForm() {
+    var name = document.getElementById("modal-family-name").value.trim();
+    var phone = document.querySelector("[name='appointment[phone]']").value.trim();
+    var error = document.getElementById("modal-error");
+
+    if (!name && !phone) {
+      error.textContent = "Preencha o nome da família e o telefone.";
+      error.style.display = "block";
+      document.getElementById("modal-family-name").focus();
+      return false;
+    } else if (!name) {
+      error.textContent = "Preencha o nome da família.";
+      error.style.display = "block";
+      document.getElementById("modal-family-name").focus();
+      return false;
+    } else if (!phone) {
+      error.textContent = "Preencha o telefone para contato.";
+      error.style.display = "block";
+      document.querySelector("[name='appointment[phone]']").focus();
+      return false;
+    }
+
+    error.style.display = "none";
+    return true;
   }
 
   document.addEventListener("keydown", function(e) {
