@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get   "dashboard/appointments",to: "dashboard#appointments",   as: :dashboard_appointments
   delete "dashboard/appointments/:id", to: "dashboard#destroy_appointment", as: :dashboard_appointment
 
-  # Página pública da ala (via token)
+  # Página pública da ala/ramo (via token)
   get  "w/:token",              to: "public#show",   as: :public_ward
   post "w/:token/appointments", to: "public#create", as: :public_appointments
 end

@@ -33,7 +33,7 @@ class PublicController < ApplicationController
   def set_ward
     @ward = Ward.find_by!(public_token: params[:token])
   rescue ActiveRecord::RecordNotFound
-    render plain: "Ala não encontrada.", status: :not_found
+    render plain: "Ala/Ramo não encontrado.", status: :not_found
   end
 
   def appointment_params

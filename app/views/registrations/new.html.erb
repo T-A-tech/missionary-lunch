@@ -1,7 +1,7 @@
 <div class="container-sm">
   <div class="card">
     <h1 style="margin-bottom:.25rem">Criar conta</h1>
-    <p class="text-muted" style="margin-bottom:1.5rem">Líder de ala — cadastre sua unidade</p>
+    <p class="text-muted" style="margin-bottom:1.5rem">Líder de ala/ramo — cadastre sua unidade</p>
 
     <%= form_with url: register_path, scope: nil do |f| %>
       <div class="form-group">
@@ -26,8 +26,8 @@
         <%= text_field_tag :stake_name, nil, placeholder: "Ex: Estaca Fortaleza Leste" %>
       </div>
       <div class="form-group">
-        <%= label_tag :ward_name, "Nome da sua ala" %>
-        <%= text_field_tag :ward_name, nil, placeholder: "Ex: Ala Messejana" %>
+        <%= label_tag :ward_name, "Nome da sua ala/ramo" %>
+        <%= text_field_tag :ward_name, nil, placeholder: "Ex: Ala Messejana / Ramo Canindé" %>
       </div>
       <%= f.submit "Criar conta", class: "btn btn-primary", style: "width:100%" %>
     <% end %>

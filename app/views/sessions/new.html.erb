@@ -1,22 +1,63 @@
-<div class="container-sm">
-  <div class="card">
-    <h1 style="margin-bottom:.25rem">Entrar</h1>
-    <p class="text-muted" style="margin-bottom:1.5rem">Acesse o painel da sua ala</p>
+<%# Slideshow de fundo %>
+<div id="slideshow" style="position:fixed;inset:0;z-index:0;overflow:hidden">
+  <div id="slide-1" style="position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 4s ease-in-out"></div>
+  <div id="slide-2" style="position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 4s ease-in-out"></div>
+  <div style="position:absolute;inset:0;background:rgba(250,248,244,0.7)"></div>
+</div>
 
-    <%= form_with url: login_path do |f| %>
-      <div class="form-group">
-        <%= f.label :email, "E-mail" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-      </div>
-      <div class="form-group">
-        <%= f.label :password, "Senha" %>
-        <%= f.password_field :password, autocomplete: "current-password" %>
-      </div>
-      <%= f.submit "Entrar", class: "btn btn-primary", style: "width:100%" %>
-    <% end %>
+<div style="position:relative;z-index:1">
+  <div class="container-sm">
+    <p style="font-family:Georgia,serif;font-size:37px;font-weight:600;color:#D4A843;letter-spacing:0.05em;text-align:center;margin-bottom:1rem;text-shadow:0 1px 3px rgba(0,0,0,0.3)">Almoço dos Missionários</p>
+    <div class="card">
+      <h1 style="margin-bottom:.25rem">Entrar</h1>
+      <p class="text-muted" style="margin-bottom:1.5rem">Acesse o painel da sua ala/ramo</p>
 
-    <p class="text-muted" style="margin-top:1rem;text-align:center">
-      Não tem conta? <%= link_to "Cadastre-se", register_path %>
-    </p>
+      <%= form_with url: login_path do |f| %>
+        <div class="form-group">
+          <%= f.label :email, "E-mail" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :password, "Senha" %>
+          <%= f.password_field :password, autocomplete: "current-password" %>
+        </div>
+        <%= f.submit "Entrar", class: "btn btn-primary", style: "width:100%" %>
+      <% end %>
+
+      <p class="text-muted" style="margin-top:1rem;text-align:center">
+        Não tem conta? <%= link_to "Cadastre-se", register_path %>
+      </p>
+    </div>
   </div>
 </div>
+
+<script>
+  var slides = [
+    <% Dir.glob(Rails.root.join("app/assets/images/slides/*.{jpg,jpeg,png,webp}")).sort.each do |img| %>
+      "<%= asset_path("slides/#{File.basename(img)}") %>",
+    <% end %>
+  ];
+
+  var current = 0;
+  var el1 = document.getElementById("slide-1");
+  var el2 = document.getElementById("slide-2");
+  var front = el1;
+  var back = el2;
+
+  if (slides.length > 0) {
+    front.style.backgroundImage = "url(" + slides[0] + ")";
+    front.style.opacity = 1;
+  }
+
+  if (slides.length > 1) {
+    setInterval(function() {
+      current = (current + 1) % slides.length;
+      back.style.backgroundImage = "url(" + slides[current] + ")";
+      back.style.opacity = 1;
+      front.style.opacity = 0;
+      var temp = front;
+      front = back;
+      back = temp;
+    }, 8000);
+  }
+</script>
