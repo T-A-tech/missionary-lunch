@@ -2,8 +2,8 @@ name: Keep Alive
 
 on:
   schedule:
-    # A cada 14 minutos, de 7h às 23h (UTC-3 = 10h às 02h UTC)
-    - cron: "*/14 10-23,0-2 * * *"
+    # A cada 7 minutos, de 7h às 23h (UTC-3 = 10h às 02h UTC)
+    - cron: "*/7 10-23,0-2 * * *"
   workflow_dispatch:
 
 jobs:
@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Render
-        run: curl -fsS -o /dev/null -w "%{http_code}" https://missionary-lunch.onrender.com
+        run: curl -fsS -o /dev/null -w "%{http_code}" https://missionary-lunch.onrender.com/healthcheck
