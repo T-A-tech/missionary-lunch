@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root "sessions#new"
 
+  # Healthcheck (sem auth, usado pelo CI keep-alive)
+  get "healthcheck", to: proc { [200, {}, ["ok"]] }
+
   # Autenticação
   get    "login",    to: "sessions#new"
   post   "login",    to: "sessions#create"
