@@ -12,6 +12,7 @@
 # Environment
 .env
 .env.*
+!.env.example
 /config/master.key
 /config/credentials/*.key
 

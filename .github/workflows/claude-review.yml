@@ -1,0 +1,46 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Claude PR Review
+        uses: grll/claude-code-action@beta
+        with:
+          use_oauth: true
+          claude_access_token: ${{ secrets.CLAUDE_ACCESS_TOKEN }}
+          claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
+          claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
+          secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
+          prompt: |
+            Você é um revisor de código experiente em Ruby on Rails.
+            Revise este PR e poste comentários inline nas linhas com problemas.
+
+            Foque em:
+            - Bugs e erros de lógica
+            - Vulnerabilidades de segurança (SQL injection, mass assignment, etc.)
+            - Problemas de performance (N+1 queries, falta de índices, callbacks pesados)
+            - Violações das convenções do projeto descritas no CLAUDE.md
+            - Erros em migrações ou mudanças de schema perigosas
+
+            Não comente sobre:
+            - Estilo de código subjetivo
+            - Falta de testes (a menos que seja crítico)
+            - Formatação ou espaçamento
+
+            Se não encontrar problemas relevantes, poste um comentário curto confirmando que o PR está OK.
