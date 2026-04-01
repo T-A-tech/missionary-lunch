@@ -27,7 +27,7 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          direct_prompt: |
+          prompt: |
             Você é um revisor de código experiente em Ruby on Rails.
             Revise este PR e poste comentários inline nas linhas com problemas.
 
