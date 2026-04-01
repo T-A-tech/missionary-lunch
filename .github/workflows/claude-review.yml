@@ -8,6 +8,7 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
+  id-token: write
 
 jobs:
   review:
@@ -27,7 +28,7 @@ jobs:
           claude_refresh_token: ${{ secrets.CLAUDE_REFRESH_TOKEN }}
           claude_expires_at: ${{ secrets.CLAUDE_EXPIRES_AT }}
           secrets_admin_pat: ${{ secrets.SECRETS_ADMIN_PAT }}
-          prompt: |
+          direct_prompt: |
             Você é um revisor de código experiente em Ruby on Rails.
             Revise este PR e poste comentários inline nas linhas com problemas.
 
