@@ -9,6 +9,11 @@ AllCops:
   Exclude:
     - "db/schema.rb"
 
+# Omakase uses [ ] with spaces, but Rails generators use [] without.
+# Disabling to avoid conflicts with auto-generated code.
 Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
+Layout/SpaceAfterComma:
   Exclude:
-    - "config/routes.rb"
+    - "db/schema.rb"
