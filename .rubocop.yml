@@ -16,4 +16,4 @@ Layout/SpaceInsideArrayLiteralBrackets:
 
 Layout/SpaceAfterComma:
   Exclude:
-    - "db/schema.rb"
+    - "db/**/*"
