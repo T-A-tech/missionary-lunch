@@ -15,5 +15,4 @@ Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: false
 
 Layout/SpaceAfterComma:
-  Exclude:
-    - "db/**/*"
+  Enabled: false
