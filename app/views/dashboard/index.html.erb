@@ -9,7 +9,10 @@
       <h1><%= @ward.name %></h1>
       <p class="text-muted"><%= @ward.stake.name %></p>
     </div>
-    <%= link_to "Ver todos os agendamentos →", dashboard_appointments_path, class: "btn btn-outline" %>
+    <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+      <%= link_to "Ver todos os agendamentos →", dashboard_appointments_path, class: "btn btn-outline" %>
+      <%= button_to "Sair", logout_path, method: :delete, class: "btn btn-danger" %>
+    </div>
   </div>
 
   <%# Link público %>
