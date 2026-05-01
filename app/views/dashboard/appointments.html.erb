@@ -11,7 +11,7 @@
         <tbody>
           <% @upcoming.each do |apt| %>
             <tr>
-              <td><%= apt.scheduled_date.strftime("%d/%m/%Y (%A)") %></td>
+              <td><%= I18n.l(apt.scheduled_date, format: "%d/%m/%Y (%A)") %></td>
               <td><%= apt.family_name %></td>
               <td><%= apt.phone.presence || "—" %></td>
               <td>

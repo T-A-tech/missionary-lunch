@@ -246,21 +246,16 @@
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <span class="nav-brand">Almoços Missionários</span>
-    <% unless controller_name == "public" %>
+  <% if logged_in? %>
+    <nav class="nav">
+      <span class="nav-brand">Almoços Missionários</span>
       <div class="nav-links">
-        <% if logged_in? %>
-          <%= link_to "Dashboard", dashboard_path %>
-          <%= link_to "Agendamentos", dashboard_appointments_path %>
-          <%= button_to "Sair", logout_path, method: :delete, class: "btn btn-outline btn-sm" %>
-        <% else %>
-          <%= link_to "Entrar", login_path %>
-          <%= link_to "Criar conta", register_path, class: "btn btn-secondary btn-sm" %>
-        <% end %>
+        <%= link_to "Dashboard", dashboard_path %>
+        <%= link_to "Agendamentos", dashboard_appointments_path %>
+        <%= button_to "Sair", logout_path, method: :delete, class: "btn btn-outline btn-sm" %>
       </div>
-    <% end %>
-  </nav>
+    </nav>
+  <% end %>
 
   <% if notice.present? %>
     <div class="container"><div class="alert alert-notice"><%= notice %></div></div>
