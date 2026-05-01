@@ -3,7 +3,7 @@
     <h1 style="margin-bottom:.25rem">Criar conta</h1>
     <p class="text-muted" style="margin-bottom:1.5rem">Líder de ala/ramo — cadastre sua unidade</p>
 
-    <%= form_with url: register_path, scope: nil do |f| %>
+    <%= form_with url: register_path, scope: nil, data: { turbo: false } do |f| %>
       <div class="form-group">
         <%= f.label :name, "Seu nome" %>
         <%= f.text_field :name, autofocus: true %>

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:email].to_s.downcase)
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to dashboard_path, notice: "Bem-vindo, #{user.name}!"
+      redirect_to dashboard_path
     else
       flash.now[:alert] = "E-mail ou senha incorretos."
       render :new, status: :unprocessable_entity
@@ -16,6 +16,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id)
-    redirect_to login_path, notice: "Você saiu."
+    redirect_to login_path
   end
 end

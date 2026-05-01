@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="turbo-cache-control" content="no-preview">
   <title>Almoços Missionários</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -246,7 +247,7 @@
   </style>
 </head>
 <body>
-  <% if logged_in? %>
+  <% if logged_in? && controller_name != "public" %>
     <nav class="nav">
       <span class="nav-brand">Almoços Missionários</span>
       <div class="nav-links">
